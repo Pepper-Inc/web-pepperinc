@@ -538,8 +538,14 @@
                             <label for="message">Mensaje</label>
                             <textarea id="message" name="message" rows="4" required placeholder="Cuéntanos sobre tu proyecto..."></textarea>
                         </div>
+
+                        <!-- Honeypot field: invisible to real users, bots will fill it -->
+                        <div class="hp-field" aria-hidden="true">
+                            <label for="website_url">Website</label>
+                            <input type="text" id="website_url" name="website_url" autocomplete="off" tabindex="-1">
+                        </div>
                         
-                        <button type="submit" class="btn-primary btn-full">
+                        <button type="submit" class="btn-primary btn-full" id="submitContactBtn">
                             Enviar Mensaje
                             <svg class="btn-icon" width="20" height="20" viewBox="0 0 20 20" fill="none">
                                 <path d="M18 2L9 11m9-9l-6 16-3-7-7-3 16-6z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -616,6 +622,65 @@
             </div>
         </div>
     </footer>   
+
+    <!-- Anti-Bot Confirmation Modal -->
+    <div class="captcha-overlay" id="captchaOverlay" role="dialog" aria-modal="true" aria-labelledby="captchaTitle">
+        <div class="captcha-modal glass-card">
+            <div class="captcha-header">
+                <div class="captcha-icon">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+                <div>
+                    <h3 id="captchaTitle">Verificación de Seguridad</h3>
+                    <p>Confirma que eres humano antes de enviar</p>
+                </div>
+                <button class="captcha-close" id="captchaClose" aria-label="Cerrar">&times;</button>
+            </div>
+
+            <div class="captcha-body">
+                <div class="captcha-summary">
+                    <p class="captcha-summary-label">Resumen de tu mensaje:</p>
+                    <div class="captcha-summary-grid">
+                        <span class="summary-key">Nombre:</span>  <span class="summary-val" id="summaryName">—</span>
+                        <span class="summary-key">Email:</span>   <span class="summary-val" id="summaryEmail">—</span>
+                        <span class="summary-key">Servicio:</span><span class="summary-val" id="summaryService">—</span>
+                    </div>
+                </div>
+
+                <div class="captcha-challenge">
+                    <p class="captcha-challenge-label">Resuelve para continuar:</p>
+                    <div class="captcha-math">
+                        <span id="mathQuestion" class="math-question"></span>
+                        <span class="math-eq">=</span>
+                        <input
+                            type="number"
+                            id="mathAnswer"
+                            class="math-input"
+                            placeholder="?"
+                            autocomplete="off"
+                            min="0"
+                            max="99"
+                            aria-label="Respuesta de verificación"
+                        >
+                    </div>
+                    <p class="captcha-error" id="captchaError"></p>
+                </div>
+            </div>
+
+            <div class="captcha-footer">
+                <button class="btn-secondary captcha-cancel" id="captchaCancel">Cancelar</button>
+                <button class="btn-primary captcha-confirm" id="captchaConfirm">
+                    Confirmar y Enviar
+                    <svg class="btn-icon" width="18" height="18" viewBox="0 0 20 20" fill="none">
+                        <path d="M18 2L9 11m9-9l-6 16-3-7-7-3 16-6z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
 
     <!-- JavaScript -->
     <script src="script.js"></script>

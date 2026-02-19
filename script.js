@@ -181,22 +181,68 @@ flipCards.forEach(card => {
 });
 
 // =====================================================
-// FORM SUBMISSION
+// FORM SUBMISSION — ANTI-BOT PROTECTION
 // =====================================================
 const contactForm = document.getElementById('contactForm');
 const WEBHOOK_URL = 'https://pepperinc.app.n8n.cloud/webhook/76c9875e-fba5-439b-b556-864d7dad3f9e';
 
-contactForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
+// --- Modal elements ---
+const captchaOverlay = document.getElementById('captchaOverlay');
+const captchaClose = document.getElementById('captchaClose');
+const captchaCancel = document.getElementById('captchaCancel');
+const captchaConfirm = document.getElementById('captchaConfirm');
+const captchaError = document.getElementById('captchaError');
+const mathAnswer = document.getElementById('mathAnswer');
+const mathQuestion = document.getElementById('mathQuestion');
 
-    // Get form data
-    const formData = new FormData(contactForm);
-    const data = Object.fromEntries(formData);
+let mathCorrectAnswer = 0;
+let pendingFormData = null;
 
-    // Add timestamp
-    data.timestamp = new Date().toISOString();
+// --- Generate a random math challenge ---
+function generateMathChallenge() {
+    const a = Math.floor(Math.random() * 10) + 1;
+    const b = Math.floor(Math.random() * 10) + 1;
+    const operators = ['+', '-', '×'];
+    const op = operators[Math.floor(Math.random() * operators.length)];
 
-    // Get submit button and show loading state
+    let answer;
+    if (op === '+') { answer = a + b; }
+    else if (op === '-') { answer = Math.abs(a - b); mathQuestion.textContent = `${Math.max(a, b)} ${op} ${Math.min(a, b)}`; mathCorrectAnswer = answer; return; }
+    else { answer = a * b; }
+
+    mathQuestion.textContent = `${a} ${op} ${b}`;
+    mathCorrectAnswer = answer;
+}
+
+// --- Open the confirmation modal ---
+function openCaptchaModal(data) {
+    pendingFormData = data;
+
+    // Populate summary fields
+    document.getElementById('summaryName').textContent = data.name || '—';
+    document.getElementById('summaryEmail').textContent = data.email || '—';
+    document.getElementById('summaryService').textContent = data.service || '—';
+
+    // Generate a fresh math challenge
+    generateMathChallenge();
+
+    // Reset state
+    mathAnswer.value = '';
+    captchaError.textContent = '';
+    captchaOverlay.classList.add('active');
+    setTimeout(() => mathAnswer.focus(), 300);
+}
+
+// --- Close the modal ---
+function closeCaptchaModal() {
+    captchaOverlay.classList.remove('active');
+    pendingFormData = null;
+    mathAnswer.value = '';
+    captchaError.textContent = '';
+}
+
+// --- Perform the actual send ---
+async function sendFormData(data) {
     const submitBtn = contactForm.querySelector('button[type="submit"]');
     const originalBtnHTML = submitBtn.innerHTML;
     submitBtn.disabled = true;
@@ -207,24 +253,22 @@ contactForm.addEventListener('submit', async (e) => {
         </svg>
     `;
 
-    // Send data to n8n webhook
+    // Send to n8n webhook
     try {
         await fetch(WEBHOOK_URL, {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(data)
         });
     } catch (error) {
         console.warn('Webhook request failed:', error);
     }
 
-    // Restore button state
+    // Restore button
     submitBtn.disabled = false;
     submitBtn.innerHTML = originalBtnHTML;
 
-    // Create WhatsApp message
+    // Build WhatsApp message
     const message = `
 🚀 *Nueva Consulta - Pepper Inc*
 
@@ -237,20 +281,63 @@ contactForm.addEventListener('submit', async (e) => {
 ${data.message}
     `.trim();
 
-    // Encode message for URL
-    const encodedMessage = encodeURIComponent(message);
-
-    // WhatsApp URL
-    const whatsappURL = `https://wa.me/584141800020?text=${encodedMessage}`;
-
-    // Open WhatsApp
-    window.open(whatsappURL, '_blank');
-
-    // Show success message
-    alert('¡Gracias por tu interés! Tu mensaje ha sido enviado y te redirigiremos a WhatsApp para completar tu consulta.');
+    window.open(`https://wa.me/584141800020?text=${encodeURIComponent(message)}`, '_blank');
 
     // Reset form
     contactForm.reset();
+}
+
+// ── Form submit — intercept and show modal ──────────────────────────
+contactForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    // Honeypot check: if the hidden field has a value, it's a bot
+    const honeypot = contactForm.querySelector('#website_url');
+    if (honeypot && honeypot.value.trim() !== '') {
+        console.warn('Bot detected via honeypot. Submission blocked.');
+        return; // Silent block
+    }
+
+    const formData = new FormData(contactForm);
+    const data = Object.fromEntries(formData);
+    data.timestamp = new Date().toISOString();
+
+    openCaptchaModal(data);
+});
+
+// ── Confirm button ──────────────────────────────────────────────────
+captchaConfirm.addEventListener('click', async () => {
+    const userAnswer = parseInt(mathAnswer.value, 10);
+
+    if (isNaN(userAnswer)) {
+        captchaError.textContent = '⚠ Por favor, ingresa tu respuesta.';
+        mathAnswer.focus();
+        return;
+    }
+
+    if (userAnswer !== mathCorrectAnswer) {
+        captchaError.textContent = '✗ Respuesta incorrecta. Inténtalo de nuevo.';
+        mathAnswer.value = '';
+        generateMathChallenge();
+        setTimeout(() => mathAnswer.focus(), 50);
+        return;
+    }
+
+    // Correct! Close modal and send
+    closeCaptchaModal();
+    await sendFormData(pendingFormData || {});
+});
+
+// Allow pressing Enter in the math input to confirm
+mathAnswer.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') captchaConfirm.click();
+});
+
+// ── Cancel / close ──────────────────────────────────────────────────
+captchaClose.addEventListener('click', closeCaptchaModal);
+captchaCancel.addEventListener('click', closeCaptchaModal);
+captchaOverlay.addEventListener('click', (e) => {
+    if (e.target === captchaOverlay) closeCaptchaModal();
 });
 
 // =====================================================
