@@ -184,13 +184,45 @@ flipCards.forEach(card => {
 // FORM SUBMISSION
 // =====================================================
 const contactForm = document.getElementById('contactForm');
+const WEBHOOK_URL = 'https://pepperinc.app.n8n.cloud/webhook/5d1fa687-67d6-481f-9ba9-86de75410987';
 
-contactForm.addEventListener('submit', (e) => {
+contactForm.addEventListener('submit', async (e) => {
     e.preventDefault();
 
     // Get form data
     const formData = new FormData(contactForm);
     const data = Object.fromEntries(formData);
+
+    // Add timestamp
+    data.timestamp = new Date().toISOString();
+
+    // Get submit button and show loading state
+    const submitBtn = contactForm.querySelector('button[type="submit"]');
+    const originalBtnHTML = submitBtn.innerHTML;
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = `
+        Enviando...
+        <svg class="btn-icon" width="20" height="20" viewBox="0 0 20 20" fill="none" style="animation: spin 1s linear infinite;">
+            <circle cx="10" cy="10" r="8" stroke="currentColor" stroke-width="2" fill="none" stroke-dasharray="40" stroke-dashoffset="10" stroke-linecap="round"/>
+        </svg>
+    `;
+
+    // Send data to n8n webhook
+    try {
+        await fetch(WEBHOOK_URL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        });
+    } catch (error) {
+        console.warn('Webhook request failed:', error);
+    }
+
+    // Restore button state
+    submitBtn.disabled = false;
+    submitBtn.innerHTML = originalBtnHTML;
 
     // Create WhatsApp message
     const message = `
@@ -215,7 +247,7 @@ ${data.message}
     window.open(whatsappURL, '_blank');
 
     // Show success message
-    alert('¡Gracias por tu interés! Te redirigiremos a WhatsApp para completar tu consulta.');
+    alert('¡Gracias por tu interés! Tu mensaje ha sido enviado y te redirigiremos a WhatsApp para completar tu consulta.');
 
     // Reset form
     contactForm.reset();
