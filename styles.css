@@ -702,7 +702,16 @@ img {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    padding: 40px;
+    padding: 30px;
+}
+
+/* Ensure back card stays absolutely positioned even with glass-card class */
+.service-card-back.glass-card {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
 }
 
 /* Glass Card effect */
