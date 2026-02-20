@@ -366,8 +366,8 @@ Ejemplo para cambiar a azul (#3B82F6):
 
 ### Performance
 
-- **First Contentful Paint:** < 1.5s
-- **Time to Interactive:** < 3s
+- **First Contentful Paint:** menos de 1.5s
+- **Time to Interactive:** menos de 3s
 - **Lighthouse Score:** 90+
 
 ---
