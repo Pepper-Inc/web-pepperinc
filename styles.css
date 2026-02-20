@@ -673,31 +673,6 @@ img {
     }
 }
 
-/* Mobile: class-based flip (toggled via JS — touch devices only)
-   visibility+opacity approach bypasses iOS Safari's broken backface-visibility */
-@media (hover: none),
-(pointer: coarse) {
-
-    .service-card-flip.is-flipped .service-card-front {
-        visibility: hidden;
-        opacity: 0;
-        transition: visibility 0s 0.3s, opacity 0.3s ease;
-    }
-
-    .service-card-flip.is-flipped .service-card-back {
-        visibility: visible;
-        opacity: 1;
-        transition: visibility 0s, opacity 0.3s ease;
-    }
-
-    .service-card-flip:not(.is-flipped) .service-card-back {
-        visibility: hidden;
-        opacity: 0;
-        transition: visibility 0s 0.3s, opacity 0.3s ease;
-    }
-
-}
-
 .service-card-front,
 .service-card-back {
     position: absolute;
@@ -745,9 +720,66 @@ img {
     left: 0;
     width: 100%;
     height: 100%;
-    /* On mobile the card uses visibility toggle, so no transform needed */
     transform: rotateY(180deg);
     -webkit-transform: rotateY(180deg);
+}
+
+/* ── MOBILE: Completely disable 3D flip, use flat overlay toggle ──
+   iOS Safari has broken backface-visibility inside preserve-3d.
+   On touch devices we ditch 3D entirely and stack the cards flat,
+   toggling visibility+opacity via the .is-flipped class (set by JS). */
+@media (hover: none),
+(pointer: coarse) {
+
+    /* Kill 3D context */
+    .service-card-flip {
+        perspective: none;
+        -webkit-perspective: none;
+    }
+
+    .service-card-inner {
+        transform-style: flat;
+        -webkit-transform-style: flat;
+        transition: none;
+    }
+
+    /* Remove backface-visibility — not needed in flat mode */
+    .service-card-front,
+    .service-card-back {
+        backface-visibility: visible;
+        -webkit-backface-visibility: visible;
+    }
+
+    /* Front: always visible by default, fades out when flipped */
+    .service-card-front {
+        visibility: visible;
+        opacity: 1;
+        transition: visibility 0s, opacity 0.3s ease;
+    }
+
+    .service-card-flip.is-flipped .service-card-front {
+        visibility: hidden;
+        opacity: 0;
+        transition: visibility 0s 0.3s, opacity 0.3s ease;
+    }
+
+    /* Back: flat positioned on top, hidden by default, fades in when flipped */
+    .service-card-back,
+    .service-card-back.glass-card {
+        transform: none !important;
+        -webkit-transform: none !important;
+        visibility: hidden;
+        opacity: 0;
+        z-index: 2;
+        transition: visibility 0s 0.3s, opacity 0.3s ease;
+    }
+
+    .service-card-flip.is-flipped .service-card-back,
+    .service-card-flip.is-flipped .service-card-back.glass-card {
+        visibility: visible;
+        opacity: 1;
+        transition: visibility 0s, opacity 0.3s ease;
+    }
 }
 
 /* Glass Card effect */
