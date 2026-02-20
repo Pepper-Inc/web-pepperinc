@@ -160,22 +160,27 @@ createParticles();
 // =====================================================
 // FLIP CARDS - MOBILE TOUCH SUPPORT
 // =====================================================
+// On desktop: pure CSS hover handles the 3D flip.
+// On touch devices (iOS/Android): we use a CSS class toggle (is-flipped)
+// with visibility+opacity transitions. This bypasses iOS Safari's
+// unreliable backface-visibility inside preserve-3d containers.
+// =====================================================
 const flipCards = document.querySelectorAll('.service-card-flip');
 
+const isTouchDevice = () => window.matchMedia('(hover: none), (pointer: coarse)').matches;
+
 flipCards.forEach(card => {
-    let isFlipped = false;
+    card.addEventListener('click', () => {
+        if (!isTouchDevice()) return; // desktop uses CSS :hover, no JS needed
 
-    card.addEventListener('click', (e) => {
-        // Only on mobile/tablet
-        if (window.innerWidth <= 1023) {
-            e.preventDefault();
-            isFlipped = !isFlipped;
+        const alreadyFlipped = card.classList.contains('is-flipped');
 
-            if (isFlipped) {
-                card.querySelector('.service-card-inner').style.transform = 'rotateY(180deg)';
-            } else {
-                card.querySelector('.service-card-inner').style.transform = 'rotateY(0deg)';
-            }
+        // Close all other open cards first (one at a time)
+        flipCards.forEach(c => c.classList.remove('is-flipped'));
+
+        // Toggle the clicked card
+        if (!alreadyFlipped) {
+            card.classList.add('is-flipped');
         }
     });
 });
@@ -420,10 +425,8 @@ let resizeTimer;
 window.addEventListener('resize', () => {
     clearTimeout(resizeTimer);
     resizeTimer = setTimeout(() => {
-        // Reset flip cards on resize
-        flipCards.forEach(card => {
-            card.querySelector('.service-card-inner').style.transform = 'rotateY(0deg)';
-        });
+        // Reset flip cards on resize (class-based approach)
+        flipCards.forEach(card => card.classList.remove('is-flipped'));
     }, 250);
 });
 

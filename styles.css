@@ -651,6 +651,7 @@ img {
 /* Flip Card Styles */
 .service-card-flip {
     perspective: 1000px;
+    -webkit-perspective: 1000px;
     height: 320px;
     cursor: pointer;
 }
@@ -661,10 +662,34 @@ img {
     height: 100%;
     transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
     transform-style: preserve-3d;
+    -webkit-transform-style: preserve-3d;
 }
 
-.service-card-flip:hover .service-card-inner {
-    transform: rotateY(180deg);
+/* Desktop: hover-based flip */
+@media (hover: hover) and (pointer: fine) {
+    .service-card-flip:hover .service-card-inner {
+        transform: rotateY(180deg);
+        -webkit-transform: rotateY(180deg);
+    }
+}
+
+/* Mobile: class-based flip (toggled via JS) */
+.service-card-flip.is-flipped .service-card-front {
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 0s 0.3s, opacity 0.3s ease;
+}
+
+.service-card-flip.is-flipped .service-card-back {
+    visibility: visible;
+    opacity: 1;
+    transition: visibility 0s, opacity 0.3s ease;
+}
+
+.service-card-flip:not(.is-flipped) .service-card-back {
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 0s 0.3s, opacity 0.3s ease;
 }
 
 .service-card-front,
@@ -675,6 +700,7 @@ img {
     width: 100%;
     height: 100%;
     backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
     border-radius: var(--border-radius-md);
     border: 1px solid var(--glass-border);
     overflow: hidden;
@@ -705,13 +731,17 @@ img {
     padding: 30px;
 }
 
-/* Ensure back card stays absolutely positioned even with glass-card class */
+/* Ensure back card stays absolutely positioned even with glass-card class.
+   glass-card sets position:relative which would break the 3D stack — force absolute. */
 .service-card-back.glass-card {
-    position: absolute;
+    position: absolute !important;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
+    /* On mobile the card uses visibility toggle, so no transform needed */
+    transform: rotateY(180deg);
+    -webkit-transform: rotateY(180deg);
 }
 
 /* Glass Card effect */
@@ -805,7 +835,8 @@ img {
     color: var(--text-main);
     text-align: center;
     position: relative;
-    z-index: 3;
+    /* z-index removed: caused title to bleed through back face on iOS Safari
+       due to stacking context limitations inside preserve-3d containers */
     width: 100%;
     padding: 20px 24px;
     background: linear-gradient(to top, rgba(0, 0, 0, 0.85) 0%, rgba(0, 0, 0, 0.6) 50%, transparent 100%);
