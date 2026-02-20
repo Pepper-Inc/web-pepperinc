@@ -339,11 +339,7 @@ Ejemplo para cambiar a azul (#3B82F6):
 
 ## 🙏 Créditos
 
-<<<<<<< HEAD
-- **Diseño y Desarrollo:** Pepper Inc. con Antigravity AI
-=======
 - **Diseño y Desarrollo:** Creado por Pepper Inc. powered by Antigravity AI
->>>>>>> 1d3486d (docs: Update README with official credits and contact information styling)
 - **Tipografías:** Plus Jakarta Sans & Inter (Google Fonts)
 - **Iconos:** SVG custom inline
 - **Logo:** El logo oficial es diseño y propiedad de Pepper Inc.
