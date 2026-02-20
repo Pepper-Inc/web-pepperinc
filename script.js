@@ -323,9 +323,10 @@ captchaConfirm.addEventListener('click', async () => {
         return;
     }
 
-    // Correct! Close modal and send
+    // Correct! Capture data BEFORE closing (closeCaptchaModal sets pendingFormData = null)
+    const dataToSend = pendingFormData;
     closeCaptchaModal();
-    await sendFormData(pendingFormData || {});
+    await sendFormData(dataToSend || {});
 });
 
 // Allow pressing Enter in the math input to confirm
