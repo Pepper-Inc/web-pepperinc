@@ -1,6 +1,6 @@
 # 🌶️ Pepper Inc - Landing Page Premium
 
-![Pepper Inc](images/logo.png)
+![Pepper Inc](images/logo_transparent.png)
 
 ## 📋 Descripción
 
@@ -58,7 +58,7 @@ Landing page premium en modo oscuro para **Pepper Inc**, empresa especializada e
 
 ## 📁 Estructura del Proyecto
 
-```
+```text
 web-pepperinc-v4/
 ├── index.html           # Estructura HTML completa
 ├── styles.css           # Estilos CSS con sistema de diseño
