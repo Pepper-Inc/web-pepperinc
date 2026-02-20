@@ -23,6 +23,7 @@ Landing page premium en modo oscuro para **Pepper Inc**, empresa especializada e
 ## 🎨 Paleta de Colores
 
 ### Fondos
+
 ```css
 --bg-primary: #000000      /* Negro puro */
 --bg-secondary: #09090B    /* Gris ultra oscuro */
@@ -30,6 +31,7 @@ Landing page premium en modo oscuro para **Pepper Inc**, empresa especializada e
 ```
 
 ### Verde Neón (Color Principal)
+
 ```css
 --primary-50: #f0fdf4
 --primary-100: #dcfce7
@@ -44,6 +46,7 @@ Landing page premium en modo oscuro para **Pepper Inc**, empresa especializada e
 ```
 
 ### Textos
+
 ```css
 --text-primary: #FFFFFF     /* Blanco puro */
 --text-secondary: #E4E4E7   /* Gris muy claro */
@@ -70,6 +73,7 @@ web-pepperinc-v4/
 ## 🚀 Características Técnicas
 
 ### HTML
+
 - Estructura semántica HTML5
 - Meta tags para SEO
 - Open Graph para redes sociales
@@ -77,6 +81,7 @@ web-pepperinc-v4/
 - Formulario de contacto funcional
 
 ### CSS
+
 - Variables CSS para fácil personalización
 - Glassmorphism con backdrop-filter
 - Animaciones CSS avanzadas
@@ -85,6 +90,7 @@ web-pepperinc-v4/
 - Transiciones suaves con cubic-bezier
 
 ### JavaScript
+
 - Vanilla JS (sin dependencias)
 - Intersection Observer para scroll animations
 - Contador animado para estadísticas
@@ -99,6 +105,7 @@ web-pepperinc-v4/
 ## 🎯 Secciones de la Web
 
 ### 1. **Hero Section**
+
 - Título principal con gradient text
 - Subtítulo descriptivo
 - 2 CTAs (primario y secundario)
@@ -106,16 +113,19 @@ web-pepperinc-v4/
 - Esfera 3D flotante con anillos animados
 
 ### 2. **Partners Section**
+
 - Logos de tecnologías: Linux, Windows, AWS, Azure, Dell, Cisco, Fortinet
 - Efecto hover con color y escala
 
 ### 3. **Services Section** (Flip Cards)
+
 Cada servicio tiene una tarjeta con flip 3D:
 
 **Front:** Icono SVG + Título
 **Back:** Título + Descripción + Tags de tecnologías
 
 Servicios incluidos:
+
 1. SysAdmin & SysOps
 2. DevOps & CI/CD
 3. Cloud Infrastructure
@@ -124,20 +134,24 @@ Servicios incluidos:
 6. 24/7 Support
 
 ### 4. **About Section**
+
 - Logo con efecto glow
 - Descripción de la empresa
 - 3 features destacados con iconos
 
 ### 5. **CTA Section**
+
 - Llamado a la acción principal
 - Botón grande con animación
 
 ### 6. **Contact Section**
+
 - Información de contacto (Email, WhatsApp, Website)
 - Formulario funcional que redirige a WhatsApp
 - Glass cards con glassmorphism
 
 ### 7. **Footer**
+
 - Logo y descripción
 - Links organizados por categorías
 - Información de contacto
@@ -149,6 +163,7 @@ Servicios incluidos:
 ## 🎨 Efectos y Animaciones
 
 ### Animaciones de Carga
+
 ```css
 fade-in-up        /* Elementos aparecen desde abajo */
 scale-in          /* Elementos escalan desde pequeño */
@@ -156,6 +171,7 @@ fade-in-rotate    /* Elementos rotan y aparecen */
 ```
 
 ### Animaciones en Loop
+
 ```css
 float             /* Esfera flotante (6s) */
 float-particle    /* Partículas de fondo (20s) */
@@ -165,6 +181,7 @@ rotate-ring       /* Anillos de la esfera (15-25s) */
 ```
 
 ### Hover Effects
+
 - Cards: translateY(-4px) + border glow
 - Buttons: translateY(-2px) + scale(1.02) + brightness
 - Links: Underline animado
@@ -182,6 +199,7 @@ Mobile:      0-767px     /* 1 columna, menú hamburguesa */
 ```
 
 ### Adaptaciones Mobile
+
 - Hero title: 76px → 40px
 - Esfera: 500px → 280px
 - Services grid: 3 columnas → 1 columna
@@ -201,6 +219,7 @@ Mobile:      0-767px     /* 1 columna, menú hamburguesa */
 4. Actualiza `--primary-rgb` con los valores RGB del color base
 
 Ejemplo para cambiar a azul (#3B82F6):
+
 ```css
 --primary-500: #3B82F6;
 --primary-rgb: 59, 130, 246;
@@ -225,7 +244,7 @@ Ejemplo para cambiar a azul (#3B82F6):
 ## 📞 Información de Contacto
 
 - **Website:** [www.pepperinc.net](https://www.pepperinc.net)
-- **Email:** info@pepperinc.net
+- **Email:** <info@pepperinc.net>
 - **WhatsApp:** +58 414 180 0020 / +58 414 181 2813
 
 ---
@@ -320,10 +339,15 @@ Ejemplo para cambiar a azul (#3B82F6):
 
 ## 🙏 Créditos
 
+<<<<<<< HEAD
 - **Diseño y Desarrollo:** Pepper Inc. con Antigravity AI
+=======
+- **Diseño y Desarrollo:** Creado por Pepper Inc. powered by Antigravity AI
+>>>>>>> 1d3486d (docs: Update README with official credits and contact information styling)
 - **Tipografías:** Plus Jakarta Sans & Inter (Google Fonts)
 - **Iconos:** SVG custom inline
-- **Logo:** Generado con IA (Gemini 3 Pro Image)
+- **Logo:** El logo oficial es diseño y propiedad de Pepper Inc.
+- **Imágenes:** Las imágenes fueron generadas con IA (Gemini 3 Pro Image)
 
 ---
 
@@ -353,6 +377,6 @@ Ejemplo para cambiar a azul (#3B82F6):
 ---
 
 **¿Preguntas o soporte?**
-Contacta a: info@pepperinc.net
+Contacta a: <info@pepperinc.net>
 
 🌶️ **Pepper Inc** - Infraestructura Tecnológica de Clase Mundial
