@@ -673,23 +673,29 @@ img {
     }
 }
 
-/* Mobile: class-based flip (toggled via JS) */
-.service-card-flip.is-flipped .service-card-front {
-    visibility: hidden;
-    opacity: 0;
-    transition: visibility 0s 0.3s, opacity 0.3s ease;
-}
+/* Mobile: class-based flip (toggled via JS — touch devices only)
+   visibility+opacity approach bypasses iOS Safari's broken backface-visibility */
+@media (hover: none),
+(pointer: coarse) {
 
-.service-card-flip.is-flipped .service-card-back {
-    visibility: visible;
-    opacity: 1;
-    transition: visibility 0s, opacity 0.3s ease;
-}
+    .service-card-flip.is-flipped .service-card-front {
+        visibility: hidden;
+        opacity: 0;
+        transition: visibility 0s 0.3s, opacity 0.3s ease;
+    }
 
-.service-card-flip:not(.is-flipped) .service-card-back {
-    visibility: hidden;
-    opacity: 0;
-    transition: visibility 0s 0.3s, opacity 0.3s ease;
+    .service-card-flip.is-flipped .service-card-back {
+        visibility: visible;
+        opacity: 1;
+        transition: visibility 0s, opacity 0.3s ease;
+    }
+
+    .service-card-flip:not(.is-flipped) .service-card-back {
+        visibility: hidden;
+        opacity: 0;
+        transition: visibility 0s 0.3s, opacity 0.3s ease;
+    }
+
 }
 
 .service-card-front,
