@@ -320,7 +320,7 @@ Ejemplo para cambiar a azul (#3B82F6):
 
 ## 🙏 Créditos
 
-- **Diseño y Desarrollo:** Creado con Antigravity AI
+- **Diseño y Desarrollo:** Pepper Inc. con Antigravity AI
 - **Tipografías:** Plus Jakarta Sans & Inter (Google Fonts)
 - **Iconos:** SVG custom inline
 - **Logo:** Generado con IA (Gemini 3 Pro Image)
