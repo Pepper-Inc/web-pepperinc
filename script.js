@@ -189,7 +189,7 @@ flipCards.forEach(card => {
 // FORM SUBMISSION — ANTI-BOT PROTECTION
 // =====================================================
 const contactForm = document.getElementById('contactForm');
-const WEBHOOK_URL = 'https://pepperinc.app.n8n.cloud/webhook/76c9875e-fba5-439b-b556-864d7dad3f9e';
+const WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbwhSWF2Z6rSC9MrRBZbU1cmHGglPAEP2DvN23tpAc_pJOq6uhUfg6dBrJtWH8wGJ5s/exec';
 
 // --- Modal elements ---
 const captchaOverlay = document.getElementById('captchaOverlay');
@@ -212,7 +212,12 @@ function generateMathChallenge() {
 
     let answer;
     if (op === '+') { answer = a + b; }
-    else if (op === '-') { answer = Math.abs(a - b); mathQuestion.textContent = `${Math.max(a, b)} ${op} ${Math.min(a, b)}`; mathCorrectAnswer = answer; return; }
+    else if (op === '-') {
+        answer = Math.abs(a - b);
+        mathQuestion.textContent = `${Math.max(a, b)} ${op} ${Math.min(a, b)}`;
+        mathCorrectAnswer = answer;
+        return;
+    }
     else { answer = a * b; }
 
     mathQuestion.textContent = `${a} ${op} ${b}`;
@@ -258,15 +263,16 @@ async function sendFormData(data) {
         </svg>
     `;
 
-    // Send to n8n webhook
+    // Send to Google Apps Script Web App
     try {
         await fetch(WEBHOOK_URL, {
             method: 'POST',
+            mode: 'no-cors', // Apps Script requiere no-cors o manejar redirect manualmente
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(data)
         });
     } catch (error) {
-        console.warn('Webhook request failed:', error);
+        console.warn('Submission to Sheet had a connection issue, but often succeeds with no-cors:', error);
     }
 
     // Restore button
